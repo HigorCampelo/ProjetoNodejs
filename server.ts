@@ -2,7 +2,12 @@
 //const crypto = require('crypto')
 
 import fastify from 'fastify'
-import crypto from 'node:crypto'
+import { validatorCompiler, serializerCompiler, type ZodTypeProvider, jsonSchemaTransform } from 'fastify-type-provider-zod'
+import { fastifySwagger } from '@fastify/swagger'
+import scalarAPIReference from '@scalar/fastify-api-reference'
+import { getCoursesRoute } from './src/routes/get-courses.ts'
+import { createCoursesRoute } from './src/routes/create-course.ts'
+import { getCourseByIdRoute } from './src/routes/get-course-by-id.ts'
 
 const server = fastify({
     logger: {
@@ -14,73 +19,56 @@ const server = fastify({
                  },
         },
     },
-})
+}).withTypeProvider<ZodTypeProvider>()
 
-const courses = [
-    {id: '1', title: 'Cursos de Node.js'},
-    {id:'2', title: 'Cursos de React'},
-    {id:'3', title: 'Cursos de React Native'},
-]
+// Documentação da API
+if(process.env.NODE_ENV !== 'production'){
+    
+        server.register(fastifySwagger, {
+            openapi: {
+                info: {
+                        title: 'Desafio Node.js',
+                        version: '1.0.0',
+                }
+            },
+            transform: jsonSchemaTransform, 
+        }),
 
-server.get('/courses', () => {
-    return {courses}
-})
+        server.register(scalarAPIReference, {
+            routePrefix: '/docs',
+            configuration: {
+                theme: 'mars'
+            } // optional, default to '/api-    
+        })
+}
 
-server.get('/courses/:id', (request, reply) => {
+server.setSerializerCompiler(serializerCompiler)
+server.setValidatorCompiler(validatorCompiler)
 
-    type Params = {
-        id: string
-    }
+server.register(getCoursesRoute)
+server.register(getCourseByIdRoute)
+server.register(createCoursesRoute)
 
-    const params = request.params as Params
-    const courseId = params.id
 
-    const course = courses.find(course => course.id === courseId)
+// server.delete('/courses/:id', async(request, reply) => {
 
-    if(course){
-        return ({course})
-    }
-    // 404 não encontrado
-    return reply.status(404).send()
-})
+//     type Params = {
+//         id: string
+//     }
 
-server.delete('/courses/:id', (request, reply) => {
+//     const params = request.params as Params
+//     const courseId = params.id
 
-    type Params = {
-        id: string
-    }
+//     const index = await db.delete(courses).where(eq(courses.id, courseId)).returning();
 
-    const params = request.params as Params
-    const courseId = params.id
+//     if(index.length > 0){
+    
+//         return reply.status(200).send("Excluído com sucesso")
+//     }
+//     // 404 não encontrado
+//     return reply.status(204).send()
+// })
 
-    const index = courses.findIndex(course => course.id === courseId)
-
-    if(index !== -1){
-        courses.splice(index, 1);
-        return reply.status(200).send("Excluído com sucesso")
-    }
-    // 404 não encontrado
-    return reply.status(204).send()
-})
-
-server.post('/courses', (request, reply) => {
-
-     type Body = {
-        title: string
-    }
-
-    const body = request.body as Body
-    const courseId =crypto.randomUUID()
-    const courseTitle = body.title
-
-    if(!courseTitle){
-        return reply.status(400).send({message: 'Título Obrigatório'})
-    }
-
-    courses.push({id:courseId, title: courseTitle})
-
-    return reply.status(201).send({courseId})
-})
 
 server.listen({port:3333}).then(() => {
     console.log('HTTP server running')

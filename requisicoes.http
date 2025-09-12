@@ -2,7 +2,7 @@ POST http://localhost:3333/courses
 Content-Type: application/json
 
 {
-    "title": "Docker"
+    "title": "Java"
 }
 
 ###
@@ -11,7 +11,7 @@ GET http://localhost:3333/courses
 
 
 ###
-GET http://localhost:3333/courses/be2e1413-0b4a-4e8c-8637-65cb87957552
+GET http://localhost:3333/courses/7869c9dc-3514-4e4d-95cc-e24d789e7cf4
 
 ###
-DELETE http://localhost:3333/courses/2
+DELETE http://localhost:3333/courses/40b5424f-6c18-4155-9794-37582a7fe6cb
