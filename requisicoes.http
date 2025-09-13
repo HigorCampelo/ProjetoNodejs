@@ -2,14 +2,14 @@ POST http://localhost:3333/courses
 Content-Type: application/json
 
 {
-    "title": "Java"
+    "title": "Java de Pithon"
 }
 
 ###
 
-GET http://localhost:3333/courses
+GET http://localhost:3333/courses?orderBy=title
 
-
+//?orderBy=title&page=4 
 ###
 GET http://localhost:3333/courses/7869c9dc-3514-4e4d-95cc-e24d789e7cf4
 

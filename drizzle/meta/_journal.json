@@ -15,6 +15,34 @@
       "when": 1757564563337,
       "tag": "0001_supreme_maverick",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1757707123369,
+      "tag": "0002_tired_stellaris",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1757707390421,
+      "tag": "0003_motionless_cobalt_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1757712526451,
+      "tag": "0004_chunky_sebastian_shaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1757730748989,
+      "tag": "0005_mysterious_scarlet_spider",
+      "breakpoints": true
     }
   ]
 }
